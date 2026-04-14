@@ -742,5 +742,3 @@ Em `app/main.py`, no `openapi_tags`:
 ```python
 {"name": "Boletos", "description": "Geração e consulta de boletos acadêmicos"},
 ```
-
-Pronto. O novo módulo está funcional, documentado e seguindo os mesmos padrões do restante da API.
