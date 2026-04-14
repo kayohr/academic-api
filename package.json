@@ -1,0 +1,32 @@
+{
+  "name": "academic-api",
+  "version": "0.1.0",
+  "description": "REST API for academic management — Node.js, Fastify, PostgreSQL, JWT, Docker",
+  "main": "src/app.js",
+  "scripts": {
+    "dev": "node --watch src/app.js",
+    "start": "NODE_ENV=production node src/app.js",
+    "migrate:up": "node-pg-migrate up",
+    "migrate:down": "node-pg-migrate down",
+    "migrate:create": "node-pg-migrate create",
+    "test": "node --test tests/**/*.test.js",
+    "test:watch": "node --test --watch tests/**/*.test.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@fastify/helmet": "^11.0.0",
+    "@fastify/jwt": "^8.0.0",
+    "@fastify/rate-limit": "^9.0.0",
+    "@fastify/swagger": "^8.0.0",
+    "@fastify/swagger-ui": "^4.0.0",
+    "bcrypt": "^5.1.1",
+    "fastify": "^4.28.0",
+    "pg": "^8.12.0",
+    "pino-pretty": "^11.0.0"
+  },
+  "devDependencies": {
+    "node-pg-migrate": "^7.0.0"
+  }
+}
