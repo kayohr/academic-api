@@ -210,6 +210,16 @@ class GradeCurricular(Base):
     disciplina: Mapped["Disciplina"] = relationship(back_populates="grade_curricular")
 
 
+class Prerequisito(Base):
+    __tablename__ = "prerequisito"
+    __table_args__ = (UniqueConstraint("disciplina_id", "prerequisito_id"),)
+
+    id:             Mapped[int] = mapped_column(Integer, primary_key=True)
+    disciplina_id:  Mapped[int] = mapped_column(ForeignKey("disciplina.id", ondelete="CASCADE"), nullable=False)
+    prerequisito_id: Mapped[int] = mapped_column(ForeignKey("disciplina.id", ondelete="CASCADE"), nullable=False)
+    created_at:     Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
 class Turma(Base):
     __tablename__ = "turma"
     __table_args__ = (UniqueConstraint("codigo", "semestre_id"),)

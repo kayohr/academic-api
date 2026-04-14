@@ -6,6 +6,8 @@ from app.modules.auth.router import router as auth_router
 from app.modules.instituicao.router import router as instituicao_router
 from app.modules.aluno.router import router as aluno_router
 from app.modules.professor.router import router as professor_router
+from app.modules.disciplina.router import router as disciplina_router
+from app.modules.turma.router import router as turma_router
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -28,6 +30,8 @@ app.include_router(auth_router, prefix="/auth", tags=["Auth"])
 app.include_router(instituicao_router, tags=["Instituição"])
 app.include_router(aluno_router)
 app.include_router(professor_router)
+app.include_router(disciplina_router)
+app.include_router(turma_router)
 
 
 @app.get("/health", tags=["Health"])
