@@ -1,0 +1,4 @@
+-- Rollback 001
+DROP TABLE IF EXISTS curso;
+DROP TABLE IF EXISTS departamento;
+DROP TABLE IF EXISTS campus;

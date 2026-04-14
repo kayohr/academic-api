@@ -1,0 +1,4 @@
+-- Rollback 005
+DROP TABLE IF EXISTS historico;
+DROP TABLE IF EXISTS frequencia;
+DROP TABLE IF EXISTS nota;

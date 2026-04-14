@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "node --watch src/app.js",
     "start": "NODE_ENV=production node src/app.js",
-    "migrate:up": "node-pg-migrate up",
-    "migrate:down": "node-pg-migrate down",
-    "migrate:create": "node-pg-migrate create",
+    "migrate:up": "python3 migrations/migrate.py up",
+    "migrate:down": "python3 migrations/migrate.py down",
+    "migrate:status": "python3 migrations/migrate.py status",
     "test": "node --test tests/**/*.test.js",
     "test:watch": "node --test --watch tests/**/*.test.js"
   },
@@ -26,7 +26,5 @@
     "pg": "^8.12.0",
     "pino-pretty": "^11.0.0"
   },
-  "devDependencies": {
-    "node-pg-migrate": "^7.0.0"
-  }
+  "devDependencies": {}
 }
