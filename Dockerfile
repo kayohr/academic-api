@@ -1,34 +1,26 @@
 # --- Dev stage ---
-FROM node:20-alpine AS dev
+FROM python:3.12-slim AS dev
 WORKDIR /app
 
-# Instala Python3 e dependências das migrations
-RUN apk add --no-cache python3 py3-pip && \
-    pip3 install --no-cache-dir --break-system-packages psycopg2-binary python-dotenv
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc libpq-dev && rm -rf /var/lib/apt/lists/*
 
-COPY package*.json ./
-RUN npm install
-COPY . .
-CMD ["node", "--watch", "src/app.js"]
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# --- Build stage ---
-FROM node:20-alpine AS build
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --omit=dev
 COPY . .
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 
 # --- Production stage ---
-FROM node:20-alpine AS prod
+FROM python:3.12-slim AS prod
 WORKDIR /app
-ENV NODE_ENV=production
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 
-# Python para migrations em produção
-RUN apk add --no-cache python3 py3-pip && \
-    pip3 install --no-cache-dir --break-system-packages psycopg2-binary python-dotenv
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpq-dev && rm -rf /var/lib/apt/lists/*
 
-COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/src ./src
-COPY --from=build /app/migrations ./migrations
-COPY --from=build /app/package.json .
-CMD ["node", "src/app.js"]
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2"]

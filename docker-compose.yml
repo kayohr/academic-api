@@ -4,22 +4,16 @@ services:
       context: .
       target: dev
     ports:
-      - "3000:3000"
+      - "8000:8000"
     environment:
-      NODE_ENV: development
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_NAME: academic_api
-      DB_USER: postgres
-      DB_PASSWORD: postgres
-      DATABASE_URL: postgres://postgres:postgres@postgres:5432/academic_api
-      JWT_SECRET: dev_secret_change_in_production
-      JWT_EXPIRES_IN: 15m
-      JWT_REFRESH_EXPIRES_IN: 7d
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/academic_api
+      JWT_SECRET: dev_secret_change_in_production_must_be_32_chars
+      JWT_EXPIRES_MINUTES: "15"
+      JWT_REFRESH_EXPIRES_DAYS: "7"
+      DEBUG: "true"
       LOG_LEVEL: debug
     volumes:
       - .:/app
-      - /app/node_modules
     depends_on:
       postgres:
         condition: service_healthy
@@ -40,18 +34,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-
-  seed:
-    build:
-      context: ./scripts
-      dockerfile: Dockerfile.python
-    environment:
-      DATABASE_URL: postgres://postgres:postgres@postgres:5432/academic_api
-    depends_on:
-      postgres:
-        condition: service_healthy
-    profiles:
-      - seed
 
 volumes:
   postgres_data:
