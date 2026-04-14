@@ -13,7 +13,7 @@ AdminOuCoordenador = Annotated[dict, Depends(require_roles("admin", "coordenador
 
 # ── Listagem geral ─────────────────────────────────────────────────────────────
 
-@router.get("/matriculas", response_model=dict)
+@router.get("/matriculas", response_model=dict, summary="Listar matrículas", description="Filtros: `aluno_id`, `turma_id`, `status` (ativa/trancada/cancelada).")
 async def list_matriculas(
     db: SessionDep,
     _: AdminOuCoordenador,
@@ -32,12 +32,15 @@ async def list_matriculas(
 
 # ── CRUD básico ────────────────────────────────────────────────────────────────
 
-@router.post("/matriculas", response_model=MatriculaResponse, status_code=201)
+@router.post("/matriculas", response_model=MatriculaResponse, status_code=201, summary="Realizar matrícula",
+    description="Valida pré-requisitos, vagas disponíveis, status do aluno/turma/semestre e duplicatas.",
+    responses={409: {"description": "Duplicata ou sem vagas"}, 422: {"description": "Pré-requisito não cumprido ou regra de negócio violada"}})
 async def create_matricula(body: MatriculaCreate, db: SessionDep, _: AdminOuCoordenador):
     return await service.create_matricula(db, body)
 
 
-@router.get("/matriculas/{matricula_id}", response_model=MatriculaResponse)
+@router.get("/matriculas/{matricula_id}", response_model=MatriculaResponse, summary="Buscar matrícula por ID",
+    responses={404: {"description": "Matrícula não encontrada"}})
 async def get_matricula(matricula_id: int, db: SessionDep, _: CurrentUser):
     return await service.get_matricula(db, matricula_id)
 
